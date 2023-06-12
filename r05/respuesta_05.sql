@@ -76,6 +76,6 @@ DECLARE @nombre1 varchar(20) = 'MARTHA'
 DECLARE @nombre2 varchar(20) = 'MARTA'
 DECLARE @resultado int
 
-SET @resultado = dbo.CalcularSuma(@nombre1, @nombre2)
+EXEC @resultado = dbo.CalcularSuma @nombre1, @nombre2;
 
 PRINT @resultado
