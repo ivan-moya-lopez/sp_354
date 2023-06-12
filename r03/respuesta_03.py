@@ -20,7 +20,7 @@ num_mejores_recorridos = 15
 
 ciudades = ['A', 'B', 'C', 'D', 'E']
 
-tabla_distancias = leer_tabla_distancias('tabla_distancias.csv')
+tabla_distancias = leer_tabla_distancias('./r03/tabla_distancias.csv')
 
 # Función para evaluar un recorrido
 def evaluar_recorrido(individual):
