@@ -1,20 +1,26 @@
-import numpy as np
 import random
-import pandas as pd
+import csv
 
-# Tabla de distancias
-tabla_distancias = np.array([[0, 7, 9, 8, 20],
-                             [7, 0, 10, 4, 11],
-                             [9, 10, 0, 15, 5],
-                             [8, 4, 15, 0, 17],
-                             [20, 11, 5, 17, 0]])
+# Leer la tabla de distancias desde un archivo CSV
+def leer_tabla_distancias(nombre_archivo):
+    tabla_distancias = []
+    with open(nombre_archivo, 'r') as archivo:
+        lector = csv.reader(archivo)
+        for fila in lector:
+            fila_distancias = [int(distancia) for distancia in fila]
+            tabla_distancias.append(fila_distancias)
+    return tabla_distancias
 
-ciudades = ['A', 'B', 'C', 'D', 'E']
 
 # Parámetros del algoritmo genético
 tamano_poblacion = 10
 num_generaciones = 50
 num_mejores_recorridos = 15
+
+
+ciudades = ['A', 'B', 'C', 'D', 'E']
+
+tabla_distancias = leer_tabla_distancias('tabla_distancias.csv')
 
 # Función para evaluar un recorrido
 def evaluar_recorrido(individual):
@@ -25,6 +31,7 @@ def evaluar_recorrido(individual):
         distancia_total += tabla_distancias[origen][destino]
     return distancia_total
 
+
 # Función para generar la población inicial
 def generar_poblacion_inicial():
     poblacion = []
@@ -33,10 +40,12 @@ def generar_poblacion_inicial():
         poblacion.append(recorrido)
     return poblacion
 
+
 # Función para seleccionar los mejores recorridos de la población
 def seleccionar_mejores_recorridos(poblacion):
     mejores_recorridos = sorted(poblacion, key=lambda x: evaluar_recorrido(x))[:num_mejores_recorridos]
     return mejores_recorridos
+
 
 # Función para cruzar dos recorridos
 def cruzar_recorridos(padre1, padre2):
@@ -46,6 +55,7 @@ def cruzar_recorridos(padre1, padre2):
         if ciudad not in hijo:
             hijo.append(ciudad)
     return hijo
+
 
 # Función para cruzar la población
 def cruzar_poblacion(mejores_recorridos):
@@ -57,14 +67,14 @@ def cruzar_poblacion(mejores_recorridos):
         nueva_poblacion.append(hijo)
     return nueva_poblacion
 
+
 # Función principal para ejecutar el algoritmo genético
 def main():
     random.seed(42)
-
     poblacion = generar_poblacion_inicial()
     mejores_recorridos = seleccionar_mejores_recorridos(poblacion)
 
-    for _ in range(num_generaciones):
+    for i in range(num_generaciones):
         nueva_poblacion = cruzar_poblacion(mejores_recorridos)
         mejores_recorridos = seleccionar_mejores_recorridos(nueva_poblacion)
         poblacion = nueva_poblacion
@@ -77,9 +87,6 @@ def main():
     print("Camino óptimo:", camino_optimo)
     print("Distancia óptima:", distancia_optima)
 
-    # Guardar los 15 mejores recorridos en un archivo CSV
-    df = pd.DataFrame(mejores_recorridos, columns=ciudades)
-    df.to_csv('mejores_recorridos.csv', index=False)
 
 # Llamada a la función principal
 main()
